@@ -1,25 +1,23 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using PeopleManager.Ui.Mvc.Core;
 using PeopleManager.Ui.Mvc.Models;
 
 namespace PeopleManager.Ui.Mvc.Controllers
 {
     public class PeopleController : Controller
     {
+        private readonly PeopleManagerDatabase _database;
+
+        public PeopleController(PeopleManagerDatabase peopleManagerDatabase)
+        {
+            _database = peopleManagerDatabase;
+        }
         public IActionResult Index()
         {
-            var people = GetPeople();
+            var people = _database.People;
             return View(people);
         }
 
-        private IList<Person> GetPeople()
-        {
-            return new List<Person>
-            {
-                new Person{FirstName = "Bavo", LastName = "Ketels", Email = "bavo.ketels@vives.be" },
-                new Person{FirstName = "Isabelle", LastName = "Vandoorne", Email = "isabelle.vandoorne@vives.be" },
-                new Person{FirstName = "Wim", LastName = "Engelen", Email = "wim.engelen@vives.be" },
-                new Person{FirstName = "Ebe", LastName = "Deketelaere", Email = "ebe.deketelaere@vives.be" }
-            };
-        }
+        
     }
 }
