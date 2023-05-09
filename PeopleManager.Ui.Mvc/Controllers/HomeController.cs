@@ -7,23 +7,23 @@ namespace PeopleManager.Ui.Mvc.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly PeopleManagerDatabase _database;
+        private readonly PeopleManagerDBContext _database;
 
-        public HomeController(PeopleManagerDatabase peopleManagerDatabase)
+        public HomeController(PeopleManagerDBContext peopleManagerDatabase)
         {
             _database = peopleManagerDatabase;
         }
 
         public IActionResult Index()
         {
-            var people = _database.People;
+            var people = _database.People.ToList();
             return View(people);
         }
 
         [HttpGet("Home/Detail/{id:int}")]
         public IActionResult Detail([FromRoute]int id)
         {
-            var list = _database.People;
+            var list = _database.People.ToList();
             var person = list.FirstOrDefault(list=> list.Id == id);
             if (person == null)
             {

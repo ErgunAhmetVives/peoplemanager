@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using PeopleManager.Ui.Mvc.Core;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -5,7 +6,9 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-builder.Services.AddSingleton<PeopleManagerDatabase>();
+builder.Services.AddDbContext<PeopleManagerDBContext>(options => {
+    options.UseInMemoryDatabase(nameof(PeopleManagerDBContext));
+});
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -16,7 +19,8 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 } else
 {
-    var database = app.Services.GetRequiredService<PeopleManagerDatabase>();
+    var scope = app.Services.CreateScope();
+    var database = scope.ServiceProvider.GetRequiredService<PeopleManagerDBContext>();
     database.Seed();
 }
 
